@@ -1,0 +1,51 @@
+create table tPatients(
+id int,
+fname nvarchar(100), 
+birth nvarchar(100), 
+sex nvarchar(100),
+PRIMARY KEY (id,fname),
+);
+INSERT INTO tPatients VALUES ('1','Петров Петр Петрович', '1986-12-11', '1');
+create table tMedicalCards(
+id int,
+FOREIGN KEY (id) REFERENCES tPatients(id)
+);
+INSERT INTO tMedicalCards VALUES ('1');
+create table tSubdivisions(
+subdiv_name nvarchar,
+id_subdiv int,
+fname nvarchar,
+PRIMARY KEY (id_subdiv),
+FOREIGN KEY (fname) REFERENCES tPatients(fname)
+);
+INSERT INTO tSubdivisions VALUES ('Лаборатория иммунологии','15','Петров Петр Петрович');
+create table tMedicalServiceTypes(
+id int,
+code int,
+fname nvarchar,
+PRIMARY KEY (code),
+FOREIGN KEY (fname) REFERENCES tPatients(fname)
+);
+INSERT INTO tMedicalServiceTypes VALUES ('1231','224','Петров Петр Петрович');
+create table tBiomaterialTypes(
+id int,
+material nvarchar,
+fname nvarchar,
+PRIMARY KEY(material),
+FOREIGN KEY (fname) REFERENCES tPatients(fname)
+);
+INSERT INTO tBiomaterialTypes VALUES ('2','Венозная кровь','Петров Петр Петрович');
+create table tMedicalServices(
+id int,
+code int,
+id_subdiv int,
+creationDate DATETIME,
+fname nvarchar,
+material nvarchar,
+FOREIGN KEY (id) REFERENCES tPatients(id),
+FOREIGN KEY (code) REFERENCES tMedicalServiceTypes(code),
+FOREIGN KEY (id_subdiv) REFERENCES tSubdivisions(id_subdiv),
+FOREIGN KEY (fname) REFERENCES tPatients(fname),
+FOREIGN KEY (material) REFERENCES tBiomaterialTypes(material)
+);
+INSERT INTO tMedicalServices VALUES('1','224','15','2017-06-13-00-01-11','Петров Петр Петрович','Венозная кровь');

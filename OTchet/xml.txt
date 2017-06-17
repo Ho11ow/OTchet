@@ -1,0 +1,71 @@
+use msas 
+
+declare @msid int =1
+
+declare @xml as nvarchar(4000) ='' 
+declare @creationDate datetime 
+declare @order datetime 
+declare @TypeID int
+declare @Type str
+declare @reg_id int
+declare @fname str
+declare @sex str
+declare @bdate date
+declare @sub_id int
+declare @name str
+declare @mat_id int
+declare @mater int
+ 
+
+select @creationDate=creationDate from tMedicalservices 
+where ID=@msid 
+select @order=code from tMedicalservices 
+where ID=@msid 
+select @TypeID=id from tBiomaterialTypes
+where ID=@msid 
+select @Type=material from tBiomaterialTypes
+where ID=@msid 
+select @reg_id=id from tPatients
+where ID=@msid 
+select @fname=fname from tPatients
+where ID=@msid 
+select @sex=sex from tPatients
+where ID=@msid 
+select @bdate=bithday from tPatients
+where ID=@msid 
+select @sub_id=id_subdiv from tSubdivisions
+where ID=@msid 
+select @name=subdiv_name from tSubdivisions
+where ID=@msid 
+select @mat_id=id from tBiomaterialTypes
+where ID=@msid 
+select @mater=material from tBiomaterialTypes
+where ID=@msid 
+
+set @xml = @xml + '<MedapLisObservationReport version="6.1.147">' 
+set @xml = @xml + '<ID>' + ltrim(STR(@msid)) + '</ID>' 
+set @xml = @xml + '<RegDate>' + left(convert(nvarchar,@creationDate,120),10)+'T'+RIGHT(convert(nvarchar,@creationDate,120),8) + '</RegDate>' 
+set @xml = @xml + '<HisOrderID>' + ltrim(STR(@msid)) + '</HisOrderID>' 
+set @xml = @xml + '<OrderID>' + ltrim(STR(@order)) + '</OrderID>' 
+set @xml = @xml + '<OrderDate>' + left(convert(nvarchar,@creationDate,120),10)+'T'+RIGHT(convert(nvarchar,@creationDate,120),8) + '</OrderDate>' 
+set @xml = @xml + '<SpecimenTypeID>' + ltrim(STR(@TypeID)) + '</SpecimenTypeID>' 
+set @xml = @xml + '<SpecimenType>' + ltrim(STR(@Type)) + '</SpecimenType>' 
+set @xml = @xml + '<CollectDate>' + left(convert(nvarchar,@creationDate,120),10)+'T'+RIGHT(convert(nvarchar,@creationDate,120),8) + '</CollectDate>' 
+set @xml = @xml + '<Patient>'
+set @xml = @xml + '<RegCode>' + ltrim(STR(@reg_id)) + '</RegCode>' 
+set @xml = @xml + '<FullName>' + ltrim(STR(@fname)) + '</FullName>' 
+set @xml = @xml + '<Gender>' + ltrim(STR(@sex)) + '</Gender>' 
+set @xml = @xml + '<BirthDate>' + ltrim(STR(@bdate)) + '</BirthDate>' 
+set @xml = @xml + '</Patient>' 
+set @xml = @xml + '<OrderingInstitution>'
+set @xml = @xml + '<ID>' + ltrim(STR(@sub_id)) + '</ID>' 
+set @xml = @xml + '<LocalName>' + ltrim(STR(@name)) + '</LocalName>' 
+set @xml = @xml + '</OrderingInstitution>' 
+set @xml = @xml + '<OrderInfo>' 
+set @xml = @xml + '<item>'  
+set @xml = @xml + '<ServiceID>' + ltrim(STR(@mat_id)) + '</ServiceID>' 
+set @xml = @xml + '<Service>' + ltrim(STR(@mater)) + '</Service>' 
+set @xml = @xml + '</item>'  
+set @xml = @xml + '</OrderInfo>' 
+set @xml = @xml + '</Observation>' 
+set @xml = @xml + '</MedapLisObservationReport>' 
